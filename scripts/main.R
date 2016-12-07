@@ -86,6 +86,328 @@ moran.test(fit$residuals, mich.listw, rank=TRUE)
 ###########################################
 
 
+############################################
+#Create a map of % black per county.
+###########################################
+plot(michigan_sp,col="white",axes=T)
+
+plotvar <- mich_grad_dat$percent_black
+nclr <- 5
+plotclr <- brewer.pal(nclr,"Reds")
+class <- classIntervals(plotvar,nclr,style="fixed",fixedBreaks=quantile(mich_grad_dat$percent_black,  probs = c(0,20,40,60,80,100)/100))
+class
+### To see which are the class breaks (we will need this to make the legend)
+colcode <- findColours(class,plotclr)
+
+plot(michigan_sp,col=colcode,add=T)
+
+leg.txt<-c("[0.0%, 0.2)","[0.2, 2.8)","[2.8, 4.4)","[4.4, 9.1)","[9.1, 12.5%]")
+legend("bottomleft",legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
+title(main="Michigan High School\n Percent Black")
+############################################
+#Create a map of % black per county.
+###########################################
 
 
+############################################
+#Create a map of % economically disadvantaged per county.
+###########################################
+plot(michigan_sp,col="white",axes=T)
+
+plotvar <- mich_grad_dat$percent_econ_disadvan
+nclr <- 5
+plotclr <- brewer.pal(nclr,"Reds")
+class <- classIntervals(plotvar,nclr,style="fixed",fixedBreaks=quantile(mich_grad_dat$percent_econ_disadvan,  probs = c(0,20,40,60,80,100)/100))
+class
+### To see which are the class breaks (we will need this to make the legend)
+colcode <- findColours(class,plotclr)
+
+plot(michigan_sp,col=colcode,add=T)
+
+leg.txt<-c("[19.8%, 34.6)","[34.6, 41.4)","[41.4, 46.2)","[46.2, 50.9)","[50.9, 100%]")
+legend("bottomleft",legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
+title(main="Michigan High School\n Percent Economically Disadvantaged")
+############################################
+#Create a map of % economically disadvantaged per county.
+###########################################
+
+
+##############################################
+#Here, we fit the Bayesian hierarchical spatial
+#linear model with an improper CAR prior
+##############################################
+### Now we fill the adjacency matrix W using the following trick 
+W <- matrix(0,nrow(mich_grad_dat),nrow(mich_grad_dat))
+
+rep.mich <- rep(1:nrow(mich_grad_dat),num.mich)
+
+for(i in 1:nrow(mich_grad_dat)){
+	W[i,adj.mich[rep.mich==i]] <- rep(1,num.mich[i])	
+}
+
+formula <- mich_grad_dat$graduation_rt~per_econ_dis_cent+per_black_cent
+model.car <- S.CARleroux(formula=formula,
+                         W=W,
+                         family="gaussian",
+                         fix.rho=TRUE,
+                         rho=1,
+                         burnin=10000, 
+                         n.sample=60000,
+                         thin=1, 
+                         prior.mean.beta=NULL, 
+                         prior.var.beta=NULL, 
+                         prior.nu2=NULL,
+                         prior.tau2=NULL, 
+                         verbose=TRUE)
+
+samples.eta <- model.car$samples$phi
+model.car$summary.results
+2*pnorm(abs(model.car$summary.results[,7]), mean = 0, sd = 1, lower.tail = FALSE)
+
+stargazer(model.car$summary.results[,-c(4,5)])
+
+#Trace plot for beta hats on intercept, per_econ_dis_cent, and per_black_cent
+plot(model.car$samples$beta,main="Beta Coefficients")
+
+#Trace plots for nu2 and tau2
+plot(model.car$samples$nu2,main='Nu2')
+plot(model.car$samples$tau2,main='Tau2')
+
+
+#Posterior median of spatial effects
+post.median.eta <- as.numeric(apply(samples.eta,2,median))
+plotvar <- post.median.eta
+nclr <- 5
+plotclr <- brewer.pal(nclr,"Reds")
+class <- classIntervals(plotvar,nclr,style="fixed",fixedBreaks=quantile(post.median.eta,  probs = c(0,20,40,60,80,100)/100))
+class
+colcode <- findColours(class,plotclr)
+
+plot(michigan_sp,border="black",axes=T)
+title(main="Median of Spatial Random Effects")
+plot(michigan_sp,col=colcode,add=T)
+
+leg.txt<-c("[-0.02, -0.003)","[-0.003, 0.0007)","[0.0007, 0.004)","[0.004, 0.01)","[0.01, 2.07]")
+legend("bottomleft",legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
+
+
+###Posterior SD of spatial effects
+post.sd.eta <- as.numeric(apply(samples.eta,2,sd))
+plotvar <- post.sd.eta
+nclr <- 5
+plotclr <- brewer.pal(nclr,"Reds")
+class <- classIntervals(plotvar,nclr,style="fixed",fixedBreaks=quantile(post.sd.eta,  probs = c(0,20,40,60,80,100)/100))
+class
+colcode <- findColours(class,plotclr)
+
+plot(michigan_sp,border="black",axes=T)
+title(main="SD of Spatial Random Effects")
+plot(michigan_sp,col=colcode,add=T)
+
+leg.txt<-c("[0.32, 0.37)","[0.37, 0.43)","[0.43, 0.54)","[0.54, 1.00)","[1.00, 1.63]")
+legend("bottomleft",legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
+
+
+#Get credible intervals for each state
+lower<-c()
+upper<-c()
+for(i in 1:dim(samples.eta)[2]){
+  lower<-append(lower,quantile(samples.eta[,i],  probs = c(.025,.975))[1])
+  upper<-append(upper,quantile(samples.eta[,i],  probs = c(.025,.975))[2])
+}
+
+cbind(lower,upper)
+#all intervals contain 0,
+# no significantly positive/negative spatial random effects
+
+##############################################
+#Here, we fit the Bayesian hierarchical spatial
+#linear model with an improper CAR prior
+##############################################
+
+
+
+##############################################
+#Here, we fit the Bayesian hierarchical spatial
+#linear model with a PROPER CAR model
+##############################################
+
+mich.w.proper.car <- nb2listw(mich.nb,style="B")
+
+model.proper.car <- spautolm(formula=formula,
+                             listw=mich.w.proper.car,
+                             family="CAR")
+summary(model.proper.car)
+
+##############################################
+#Here, we fit the Bayesian hierarchical spatial
+#linear model with a PROPER CAR model
+##############################################
+
+
+
+##############################################
+#Here, we fit the Bayesian hierarchical spatial
+#linear model with SAR model
+##############################################
+
+model.sar <- spautolm(formula=formula,listw=mich.listw,family="SAR")
+summary(model.sar)
+
+##############################################
+#Here, we fit the Bayesian hierarchical spatial
+#linear model with SAR model
+##############################################
+
+
+
+
+###############################################
+#Disease Modeling Approach
+###############################################
+
+### The function S.CARbym fits spatial model to the Poisson data with two sets of random effects, the spatial
+### and non spatial ones.
+### Specifically, the model that will be fit is a Poisson model for the observed counts
+### with mean (parameter) equal to E*relative risk where E represents the expected counts.
+### In the S.CARbym function, we specify a formula that describes how the log of the
+### mean of the Poisson distribution for the observed counts depends on covariates.
+### Taking the log of E*relative risk, we have log(E)+log(relative risk).
+### So the formula command expresses how the log(relative risk) depends on covariates and adds as offset
+### the log(E), or the log of the expected counts.
+
+### Here, since we assume that the log relative risk depends on the percentage of population 
+### involved in Agriculture, Fisheries and Forestries, we have:
+
+num_graduating<-as.integer(mich_grad_dat$num_graduating)
+num_cohort<-mich_grad_dat$cohort_count
+
+formula2 <- num_graduating~per_econ_dis_cent + per_black_cent + offset(log(num_cohort))
+
+model.poi <- S.CARbym(formula=formula2, family="poisson", W=W, burnin=30000, n.sample=170000)
+
+model.poi$summary.results
+
+#Trace plots
+plot(model.poi$samples$beta)
+###############################################
+#Disease Modeling Approach
+###############################################
+
+
+
+###############################################
+#Plot the propensity to graduate
+###############################################
+#Make a cloropleth of the estimated propensity to graduate
+
+### Estimated relative risks / PROPENSITY TO GRADUATE
+### The relative risks are given by exp(X*beta+random effects) and are stored in the fitted values
+ 
+###  This gets the component of the log relative risk that is given by X*beta.
+###  The result of this is a matrix with as many rows as MCMC samples we have for the beta coefficients and as many columns
+###  as number of areal units
+RR.covariate <- model.poi$samples$beta%*%t(matrix(cbind(rep(1,nrow(mich_grad_dat)),per_econ_dis_cent,per_black_cent),nrow(mich_grad_dat),3))
+
+###  This gets the component of the log relative risk that is given by the random effects
+###  The result of this is a matrix with as many rows as MCMC samples we have for the spatial random effects (phi) and as many columns
+###  as number of areal units
+
+RR.random <- model.poi$samples$psi
+#+model.scotland$residuals[,3]
+RR.all <- exp(RR.covariate+RR.random)
+
+post.median.RR <- apply(RR.all,2,median)
+plotvar <- post.median.RR
+nclr<-5
+
+plotclr <- brewer.pal(nclr,"Reds")
+class <- classIntervals(plotvar,nclr,style="fixed",fixedBreaks=quantile(post.median.RR,  probs = c(0,20,40,60,80,100)/100))
+class
+
+colcode <- findColours(class,plotclr)
+
+plot(michigan_sp,border="black",axes=T)
+title(main="Estimated Propensity to Graduate High School")
+plot(michigan_sp,col=colcode,add=T)
+
+leg.txt<-c("[0.74, 0.83)","[0.83, 0.85)","[0.85, 0.87)","[0.87, 0.88)","[0.88, 0.91]")
+legend('bottomleft',legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
+
+###############################################
+#Plot the propensity to graduate
+###############################################
+
+
+
+
+###############################################
+#The posterior median of the spatial random effects
+###############################################
+post.median.psi <- as.numeric(apply(model.poi$samples$psi,2,median))
+plotvar <- post.median.psi
+nclr<-5
+
+plotclr <- brewer.pal(nclr,"Reds")
+class <- classIntervals(plotvar,nclr,style="fixed",fixedBreaks=quantile(post.median.psi,  probs = c(0,20,40,60,80,100)/100))
+class
+
+colcode <- findColours(class,plotclr)
+
+plot(michigan_sp,border="black",axes=T)
+title(main="Posterior Median of Spatial Random Effects")
+plot(michigan_sp,col=colcode,add=T)
+
+leg.txt<-c("[-0.70, -0.02)","[-0.02, -0.001)","[-0.001, 0.01)","[0.01, 0.02)","[0.02, 0.05]")
+legend('bottomleft',legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
+
+
+#the lower bound of their 95% CI
+post.lower.psi <- as.numeric(apply(model.poi$samples$psi,2,quantile,probs=c(2.5)/100))
+
+
+#the upper bound of their 95% CI
+post.upper.psi <- as.numeric(apply(model.poi$samples$psi,2,quantile,probs=c(97.5)/100))
+
+# counties with significantly positive spatial random effects
+nrow(mich_grad_dat[(post.lower.psi>0),])
+
+# counties with significantly negative spatial random effects
+nrow(mich_grad_dat[post.upper.psi<0,])
+
+plotvar<-c()
+for(i in 1:nrow(mich_grad_dat)){
+  #sig. positive spatial random effects
+  if(post.lower.psi[i]>0){
+    plotvar<-append(plotvar,post.lower.psi[i])
+  }
+  #sig. negative spatial random effects
+  else if(post.upper.psi[i]<0){
+    plotvar<-append(plotvar,post.lower.psi[i])
+  }
+  else{
+    plotvar<-append(plotvar,0)
+    #print(as.character(election_dat$State[i]))
+
+  }
+}
+
+nclr<-2
+
+plotclr <- c("blue","grey80")
+class <- classIntervals(plotvar,nclr,style="fixed",fixedBreaks=c(min(plotvar), 0, max(plotvar)), intervalClosure='left')
+
+
+colcode <- findColours(class,plotclr)
+
+plot(michigan_sp,border="black",axes=T)
+title(main="Spatial Random Effects")
+plot(michigan_sp,col=colcode,add=T)
+
+leg.txt<-c("Sig. Negative","Not Significant")
+legend('bottomleft',legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
+
+###############################################
+#The posterior median of the spatial random effects
+###############################################
 
