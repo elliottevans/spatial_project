@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.11.19)  3 DEC 2016 23:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2016.12.9)  9 DEC 2016 15:46
 entering extended mode
 **\def\tikzexternalrealjob{final_project}\input{final_project}
 (final_project.tex ("C:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls"
@@ -561,7 +561,39 @@ Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 \SVG@out@width=\skip54
 \SVG@out@height=\skip55
 \c@svgfigure=\count139
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\adjustbox\adjustbox.sty"
+Package: adjustbox 2012/05/21 v1.0 Adjusting TeX boxes (trim, clip, ...)
+("C:\Program Files\MiKTeX 2.9\tex\latex\adjustbox\adjcalc.sty"
+Package: adjcalc 2012/05/16 v1.1 Provides advanced setlength with multiple back
+-ends (calc, etex, pgfmath)
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\adjustbox\trimclip.sty"
+Package: trimclip 2012/05/16 v1.0 Trim and clip general TeX material
+("C:\Program Files\MiKTeX 2.9\tex\latex\collectbox\collectbox.sty"
+Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
+\collectedbox=\box40
 )
+\tc@llx=\dimen190
+\tc@lly=\dimen191
+\tc@urx=\dimen192
+\tc@ury=\dimen193
+Package trimclip Info: Using driver 'tc-pdftex.def'.
+("C:\Program Files\MiKTeX 2.9\tex\latex\adjustbox\tc-pdftex.def"
+File: tc-pdftex.def 2012/05/13 v1.0 Clipping driver for pdftex
+))
+\adjbox@Width=\dimen194
+\adjbox@Height=\dimen195
+\adjbox@Depth=\dimen196
+\adjbox@Totalheight=\dimen197
+("C:\Program Files\MiKTeX 2.9\tex\latex\ifoddpage\ifoddpage.sty"
+Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
+\c@checkoddpage=\count140
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\ltxmisc\varwidth.sty"
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box41
+\sift@deathcycles=\count141
+\@vwid@loff=\dimen198
+\@vwid@roff=\dimen199
+))
 ("C:\Program Files\MiKTeX 2.9\tex\latex\pgf\frontendlayer\libraries\tikzlibrary
 external.code.tex" ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmd
 s.sty"
@@ -585,40 +617,40 @@ Package TikZ externalization: calling \geometry{driver=none} during externaliza
 tion.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.sty"
-\lst@mode=\count140
-\lst@gtempboxa=\box40
+\lst@mode=\count142
+\lst@gtempboxa=\box42
 \lst@token=\toks45
-\lst@length=\count141
-\lst@currlwidth=\dimen190
-\lst@column=\count142
-\lst@pos=\count143
-\lst@lostspace=\dimen191
-\lst@width=\dimen192
-\lst@newlines=\count144
-\lst@lineno=\count145
-\lst@maxwidth=\dimen193
+\lst@length=\count143
+\lst@currlwidth=\dimen256
+\lst@column=\count144
+\lst@pos=\count145
+\lst@lostspace=\dimen257
+\lst@width=\dimen258
+\lst@newlines=\count146
+\lst@lineno=\count147
+\lst@maxwidth=\dimen259
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
-\c@lstnumber=\count146
-\lst@skipnumbers=\count147
-\lst@framebox=\box41
+\c@lstnumber=\count148
+\lst@skipnumbers=\count149
+\lst@framebox=\box43
 ) ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.cfg"
 File: listings.cfg 2015/06/04 1.6 listings configuration
 ))
 Package: listings 2015/06/04 1.6 (Carsten Heinz)
 No file tikz/final_project-figure0.aux.
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
 *geometry* detected driver: <none>
 *geometry* verbose mode - [ preamble ] result:
 * driver: \Gm@driver 
@@ -655,16 +687,16 @@ LaTeX Font Info:    ... okay on input line 31.
 ABD: EveryShipout initializing macros ("C:\Program Files\MiKTeX 2.9\tex\context
 \base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count148
-\scratchdimen=\dimen194
-\scratchbox=\box42
-\nofMPsegments=\count149
-\nofMParguments=\count150
+\scratchcounter=\count150
+\scratchdimen=\dimen260
+\scratchbox=\box44
+\nofMPsegments=\count151
+\nofMParguments=\count152
 \everyMPshowfont=\toks46
-\MPscratchCnt=\count151
-\MPscratchDim=\dimen195
-\MPnumerator=\count152
-\makeMPintoPDFobject=\count153
+\MPscratchCnt=\count153
+\MPscratchDim=\dimen261
+\MPnumerator=\count154
+\makeMPintoPDFobject=\count155
 \everyMPtoPDFconversion=\toks47
 ) ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty"
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
@@ -698,31 +730,60 @@ Package caption Info: End \AtBeginDocument code.
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
 ick labels; missing features). Consider writing \pgfplotsset{compat=1.14} into 
 your preamble.
- on input line 31.
+ on input line 32.
 
-\c@lstlisting=\count154
-(C:/Users/Elliott/Desktop/BIOSTAT696/finalproject/mich.tex
+\c@lstlisting=\count156
+(mich_grad_rts.tex
 \openout4 = `tikz/final_project-figure0.dpth'.
 
-[1
+[2
 
+\providecommand \oddpage@label [2]{}
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}])
-Overfull \hbox (6.70253pt too wide) in paragraph at lines 51--53
+Overfull \hbox (5.39699pt too wide) in paragraph at lines 70--72
  [][] 
  []
 
+LaTeX Font Info:    Try loading font information for U+msa on input line 75.
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 75.
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) (percent_black.tex
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
+)
+Overfull \hbox (149.05217pt too wide) in paragraph at lines 90--91
+ [][] 
+ []
+
+(percent_econ_disadvan.tex
+A tikzpicture has been optimized away. Use '/tikz/external/optimize=false' to d
+isable this.
+)
+Overfull \hbox (195.14548pt too wide) in paragraph at lines 96--97
+ [][] 
+ []
+
+The command '\includegraphics [scale=.6]{trace_plots.pdf}' has been optimized a
+way. Use '/tikz/external/optimize=false' to disable this.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
  ) 
 Here is how much of TeX's memory you used:
- 25469 strings out of 493334
- 630332 string characters out of 3139245
- 847553 words of memory out of 3000000
- 28577 multiletter control sequences out of 15000+200000
- 4713 words of font info for 18 fonts, out of 3000000 for 9000
+ 26040 strings out of 493334
+ 639856 string characters out of 3139246
+ 1009505 words of memory out of 144000000
+ 29099 multiletter control sequences out of 15000+200000
+ 9499 words of font info for 36 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 63i,11n,96p,769b,817s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 63i,12n,96p,1556b,777s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Pr
 ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on tikz/final_project-figure0.pdf (1 page, 40140 bytes).
+Output written on tikz/final_project-figure0.pdf (1 page, 39971 bytes).
 PDF statistics:
  17 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

@@ -18,7 +18,8 @@ IDs<-michigan_map$names
 michigan_sp <- map2SpatialPolygons(michigan_map, IDs = IDs,
                             proj4string = CRS("+proj=longlat +ellps=WGS84"))
 
-plot(michigan_sp,col="white",axes=T)
+makepic('mich_grad_rts',width=4,height=4)
+plot(michigan_sp,col="white",axes=F)
 
 plotvar <- mich_grad_dat$graduation_rt
 nclr <- 5
@@ -33,6 +34,8 @@ plot(michigan_sp,col=colcode,add=T)
 leg.txt<-c("[60%, 81)","[81, 84)","[84, 87)","[87, 89)","[89, 98%]")
 legend("bottomleft",legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
 title(main="Michigan High School\n Graduation Rates")
+box(col = 'black')
+dev.off()
 ############################################
 #Create a map of graduation rts per county.
 ###########################################
@@ -89,7 +92,8 @@ moran.test(fit$residuals, mich.listw, rank=TRUE)
 ############################################
 #Create a map of % black per county.
 ###########################################
-plot(michigan_sp,col="white",axes=T)
+makepic('percent_black',width=4,height=4)
+plot(michigan_sp,col="white",axes=F)
 
 plotvar <- mich_grad_dat$percent_black
 nclr <- 5
@@ -103,7 +107,9 @@ plot(michigan_sp,col=colcode,add=T)
 
 leg.txt<-c("[0.0%, 0.2)","[0.2, 2.8)","[2.8, 4.4)","[4.4, 9.1)","[9.1, 12.5%]")
 legend("bottomleft",legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
-title(main="Michigan High School\n Percent Black")
+title(main="Michigan High Schools\n Percent African-American")
+box(col = 'black')
+dev.off()
 ############################################
 #Create a map of % black per county.
 ###########################################
@@ -112,7 +118,8 @@ title(main="Michigan High School\n Percent Black")
 ############################################
 #Create a map of % economically disadvantaged per county.
 ###########################################
-plot(michigan_sp,col="white",axes=T)
+makepic('percent_econ_disadvan',width=4,height=4)
+plot(michigan_sp,col="white",axes=F)
 
 plotvar <- mich_grad_dat$percent_econ_disadvan
 nclr <- 5
@@ -126,7 +133,9 @@ plot(michigan_sp,col=colcode,add=T)
 
 leg.txt<-c("[19.8%, 34.6)","[34.6, 41.4)","[41.4, 46.2)","[46.2, 50.9)","[50.9, 100%]")
 legend("bottomleft",legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
-title(main="Michigan High School\n Percent Economically Disadvantaged")
+title(main="Michigan High Schools\n Percent Economically Disadvantaged")
+box(col = 'black')
+dev.off()
 ############################################
 #Create a map of % economically disadvantaged per county.
 ###########################################
@@ -151,8 +160,8 @@ model.car <- S.CARleroux(formula=formula,
                          family="gaussian",
                          fix.rho=TRUE,
                          rho=1,
-                         burnin=10000, 
-                         n.sample=60000,
+                         burnin=70000, 
+                         n.sample=200000,
                          thin=1, 
                          prior.mean.beta=NULL, 
                          prior.var.beta=NULL, 
@@ -164,16 +173,18 @@ samples.eta <- model.car$samples$phi
 model.car$summary.results
 2*pnorm(abs(model.car$summary.results[,7]), mean = 0, sd = 1, lower.tail = FALSE)
 
-stargazer(model.car$summary.results[,-c(4,5)])
+stargazer(round(model.car$summary.results[,-c(4,5)],3))
 
 #Trace plot for beta hats on intercept, per_econ_dis_cent, and per_black_cent
+savepdf('trace_plots',width=17,height=16)
 plot(model.car$samples$beta,main="Beta Coefficients")
+dev.off()
 
 #Trace plots for nu2 and tau2
 plot(model.car$samples$nu2,main='Nu2')
 plot(model.car$samples$tau2,main='Tau2')
 
-
+makepic('med_spat_rand',width=4,height=4)
 #Posterior median of spatial effects
 post.median.eta <- as.numeric(apply(samples.eta,2,median))
 plotvar <- post.median.eta
@@ -183,15 +194,17 @@ class <- classIntervals(plotvar,nclr,style="fixed",fixedBreaks=quantile(post.med
 class
 colcode <- findColours(class,plotclr)
 
-plot(michigan_sp,border="black",axes=T)
+plot(michigan_sp,border="black",axes=F)
 title(main="Median of Spatial Random Effects")
 plot(michigan_sp,col=colcode,add=T)
 
 leg.txt<-c("[-0.02, -0.003)","[-0.003, 0.0007)","[0.0007, 0.004)","[0.004, 0.01)","[0.01, 2.07]")
 legend("bottomleft",legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
-
+box(col = 'black')
+dev.off()
 
 ###Posterior SD of spatial effects
+makepic('sd_spat_rand',width=4,height=4)
 post.sd.eta <- as.numeric(apply(samples.eta,2,sd))
 plotvar <- post.sd.eta
 nclr <- 5
@@ -200,13 +213,14 @@ class <- classIntervals(plotvar,nclr,style="fixed",fixedBreaks=quantile(post.sd.
 class
 colcode <- findColours(class,plotclr)
 
-plot(michigan_sp,border="black",axes=T)
+plot(michigan_sp,border="black",axes=F)
 title(main="SD of Spatial Random Effects")
 plot(michigan_sp,col=colcode,add=T)
 
 leg.txt<-c("[0.32, 0.37)","[0.37, 0.43)","[0.43, 0.54)","[0.54, 1.00)","[1.00, 1.63]")
 legend("bottomleft",legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
-
+box(col = 'black')
+dev.off()
 
 #Get credible intervals for each state
 lower<-c()
@@ -288,8 +302,10 @@ model.poi <- S.CARbym(formula=formula2, family="poisson", W=W, burnin=30000, n.s
 
 model.poi$summary.results
 
+savepdf('trace_plots_poi',width=16,height=15)
 #Trace plots
 plot(model.poi$samples$beta)
+dev.off()
 ###############################################
 #Disease Modeling Approach
 ###############################################
@@ -327,13 +343,15 @@ class
 
 colcode <- findColours(class,plotclr)
 
-plot(michigan_sp,border="black",axes=T)
-title(main="Estimated Propensity to Graduate High School")
+makepic('propensity',width=4,height=4)
+plot(michigan_sp,border="black",axes=F)
+title(main="Estimated Propensity to\n Graduate High School")
 plot(michigan_sp,col=colcode,add=T)
 
 leg.txt<-c("[0.74, 0.83)","[0.83, 0.85)","[0.85, 0.87)","[0.87, 0.88)","[0.88, 0.91]")
 legend('bottomleft',legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
-
+box(col = 'black')
+dev.off()
 ###############################################
 #Plot the propensity to graduate
 ###############################################
@@ -354,13 +372,15 @@ class
 
 colcode <- findColours(class,plotclr)
 
-plot(michigan_sp,border="black",axes=T)
-title(main="Posterior Median of Spatial Random Effects")
+makepic('post_med_poi',width=4,height=4)
+plot(michigan_sp,border="black",axes=F)
+title(main="Posterior Median of\n Spatial Random Effects")
 plot(michigan_sp,col=colcode,add=T)
 
 leg.txt<-c("[-0.70, -0.02)","[-0.02, -0.001)","[-0.001, 0.01)","[0.01, 0.02)","[0.02, 0.05]")
 legend('bottomleft',legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
-
+box(col = 'black')
+dev.off()
 
 #the lower bound of their 95% CI
 post.lower.psi <- as.numeric(apply(model.poi$samples$psi,2,quantile,probs=c(2.5)/100))
@@ -394,19 +414,21 @@ for(i in 1:nrow(mich_grad_dat)){
 
 nclr<-2
 
-plotclr <- c("blue","grey80")
+plotclr <- c("red","grey80")
 class <- classIntervals(plotvar,nclr,style="fixed",fixedBreaks=c(min(plotvar), 0, max(plotvar)), intervalClosure='left')
 
 
 colcode <- findColours(class,plotclr)
 
-plot(michigan_sp,border="black",axes=T)
-title(main="Spatial Random Effects")
+makepic('sig_effects',width=4.2,height=4)
+plot(michigan_sp,border="black",axes=F)
+title(main="Significant Spatial Random Effects")
 plot(michigan_sp,col=colcode,add=T)
 
 leg.txt<-c("Sig. Negative","Not Significant")
 legend('bottomleft',legend=leg.txt,fill=plotclr,cex=1,ncol=1,bty="n")
-
+box(col = 'black')
+dev.off()
 ###############################################
 #The posterior median of the spatial random effects
 ###############################################

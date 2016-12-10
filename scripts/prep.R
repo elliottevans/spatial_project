@@ -82,10 +82,17 @@ library(leaps)
 library(maptools)
 library(spdep)
 library(sqldf)
-savepdf <- function(file, width=16, height=10)
+savepdf <- function(file, width, height)
 {
-  fname <- paste("plots/",file,".pdf",sep="")
+  fname <- paste("tex/",file,".pdf",sep="")
   pdf(fname, width=width/2.54, height=height/2.54,
+      pointsize=10)
+  par(mgp=c(2.2,0.45,0), tcl=-0.4, mar=c(3.3,3.6,1.1,1.1))
+}
+savesvg <- function(file, width, height)
+{
+  fname <- paste("tex/",file,".svg",sep="")
+  png(fname, width=width/2.54, height=height/2.54,
       pointsize=10)
   par(mgp=c(2.2,0.45,0), tcl=-0.4, mar=c(3.3,3.6,1.1,1.1))
 }
@@ -95,7 +102,19 @@ sql<-function(str){
   sqldf()
   return(ret)
 }
-
+makepic<-function(file,width,height){
+  fname <- paste("tex/",file,".tex",sep="")
+  tikz(fname, 
+       standAlone = FALSE, 
+       width = width, height = height,
+       packages=c(options()$tikzLatexPackages,
+                  "\\usepackage{amsfonts}"),sanitize=TRUE) 
+}
+require(tikzDevice)
+options(tikzMetricPackages = c("\\usepackage[utf8]{inputenc}",
+                               "\\usepackage[T1]{fontenc}", 
+                               "\\usetikzlibrary{calc}", 
+                               "\\usepackage{amssymb}"))
 
 
 grad_dat<-read.csv('data//grad_dropout.csv')
